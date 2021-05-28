@@ -58,36 +58,34 @@ const EVENTS = {
 Object.freeze(EVENTS);
 
 app.post('/send', (req, res) => {
-    let nickname = escapeString(req.body.nickname);
-    let message = escapeString(req.body.message);
-    let color = escapeString(req.body.color);
+    let { nickname, message, color } = req.body;
 
     if (message === '/quit') {
         latestSystemMessage = {
             type: EVENTS.USER_QUIT,
-            nickname: nickname,
+            nickname: escapeString(nickname),
             event_value: null,
             time: Date.now(),
         };
     } else if (/^\/color ([0-9]|[a-f]|[A-F]){6}$/.test(message)) {
         latestSystemMessage = {
             type: EVENTS.COLOR_CHANGE,
-            nickname: nickname,
-            event_value: message.substring(message.indexOf(' ') + 1),
+            nickname: escapeString(nickname),
+            event_value: escapeString(message.substring(message.indexOf(' ') + 1)),
             time: Date.now(),
         };
     } else if (/^\/nick .+$/.test(message)) {
         latestSystemMessage = {
             type: EVENTS.NICKNAME_CHANGE,
-            nickname: nickname,
-            event_value: message.substring(message.indexOf(' ') + 1),
+            nickname: escapeString(nickname),
+            event_value: escapeString(message.substring(message.indexOf(' ') + 1)),
             time: Date.now(),
         };
     } else {
         latestMessage = {
-            nickname: nickname,
-            message: message,
-            color: color,
+            nickname: escapeString(nickname),
+            message: escapeString(message),
+            color: escapeString(color),
             time: Date.now(),
         };
     }
